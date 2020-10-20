@@ -12,7 +12,7 @@ namespace findPath
             var currentCol = fromColumn;
             for (int i = 0; i < Math.Abs(fromRow - toRow); i++)
             {
-                var nextAvailableStep = FindNextClosestStep(mapMatrix, fromRow, fromColumn, toRow, toColumn);
+                var nextAvailableStep = FindNextClosestStep(mapMatrix, currentRow, currentCol, toRow, toColumn);
                 var canDoRowShift = Math.Abs(nextAvailableStep.Key - currentRow) <= 1 && Math.Abs(nextAvailableStep.Value - currentCol) == 0 ? true : false;
                 var canDoColShift = Math.Abs(nextAvailableStep.Key - currentRow) == 0 && Math.Abs(nextAvailableStep.Value - currentCol) <= 1 ? true : false;
 
@@ -21,7 +21,7 @@ namespace findPath
                     if (currentRow == toRow && currentCol == toColumn) return true;
                     currentRow = nextAvailableStep.Key;
                     currentCol = nextAvailableStep.Value;
-                }
+                } 
             }
 
             return false;
@@ -31,13 +31,14 @@ namespace findPath
         {
             var final = new KeyValuePair<int, int>();
 
-            for (int i = fromRow; i <= toRow; i++)
+            for (int i = fromRow + 1; i <= toRow; i++)
             {
-                for(int j = fromColumn; j <= toColumn; j++)
+                for(int j = fromColumn + 1; j <= toColumn; j++)
                 {
                     if(matrix[i,j] == true)
                     {
                         final = new KeyValuePair<int, int>(i, j);
+                        return final;
                     }
                 }
             }
