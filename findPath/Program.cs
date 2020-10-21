@@ -10,18 +10,17 @@ namespace findPath
         {
             var currentRow = fromRow;
             var currentCol = fromColumn;
-            for (int i = 0; i < Math.Abs(fromRow - toRow); i++)
+            for (int i = 0; i <= Math.Abs(fromRow - toRow) + 1; i++)
             {
                 var nextAvailableStep = FindNextClosestStep(mapMatrix, currentRow, currentCol, toRow, toColumn);
                 var canDoRowShift = Math.Abs(nextAvailableStep.Key - currentRow) <= 1 && Math.Abs(nextAvailableStep.Value - currentCol) == 0 ? true : false;
                 var canDoColShift = Math.Abs(nextAvailableStep.Key - currentRow) == 0 && Math.Abs(nextAvailableStep.Value - currentCol) <= 1 ? true : false;
 
-                if (canDoRowShift || canDoColShift)
-                {
-                    if (currentRow == toRow && currentCol == toColumn) return true;
-                    currentRow = nextAvailableStep.Key;
-                    currentCol = nextAvailableStep.Value;
-                } 
+                if (!(canDoColShift || canDoRowShift)) continue;
+
+                currentRow = nextAvailableStep.Key;
+                currentCol = nextAvailableStep.Value;
+                if (currentRow == toRow && currentCol == toColumn) return true;
             }
 
             return false;
@@ -31,13 +30,14 @@ namespace findPath
         {
             var final = new KeyValuePair<int, int>();
 
-            for (int i = fromRow + 1; i <= toRow; i++)
+            for (int i = fromRow; i <= toRow; i++)
             {
-                for(int j = fromColumn + 1; j <= toColumn; j++)
+                for(int j = fromColumn; j <= toColumn; j++)
                 {
                     if(matrix[i,j] == true)
                     {
                         final = new KeyValuePair<int, int>(i, j);
+                        if (i == fromRow && j == fromColumn) continue;
                         return final;
                     }
                 }
@@ -48,10 +48,10 @@ namespace findPath
         public static void Main(string[] args)
         {
             bool[,] mapMatrix = {
-            {true, false, false},
-            {true, true, false},
-            {false, true, true}
-        };
+                {false, false, true},
+                {false, true, true},
+                {true, true, true}
+            };
 
             Console.WriteLine(RouteExists(0, 0, 2, 2, mapMatrix));
         }
